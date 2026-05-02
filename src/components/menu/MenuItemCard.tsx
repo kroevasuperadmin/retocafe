@@ -1,5 +1,6 @@
 "use client";
 
+import { motion } from "framer-motion";
 import Image from "next/image";
 import { Plus } from "lucide-react";
 import { MenuItem } from "@/lib/types";
@@ -14,7 +15,11 @@ export default function MenuItemCard({ item }: Props) {
   const { addItem } = useCart();
 
   return (
-    <div
+    <motion.div
+      initial={{ opacity: 0, y: 40 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       className="rounded-2xl overflow-hidden border transition-all group cursor-default"
       style={{ backgroundColor: "#241608", borderColor: "#3d2a0e" }}
       onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(245,158,11,0.5)")}
@@ -57,6 +62,6 @@ export default function MenuItemCard({ item }: Props) {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }

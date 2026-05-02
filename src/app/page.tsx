@@ -1,6 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import MenuGrid from "@/components/menu/MenuGrid";
-import Link from "next/link";
+import HeroSection from "@/components/home/HeroSection";
+import WhyRetoSection from "@/components/home/WhyRetoSection";
+import SignatureSection from "@/components/home/SignatureSection";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -12,33 +14,9 @@ export default async function HomePage() {
 
   return (
     <div>
-      {/* Hero */}
-      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-10" style={{ background: "linear-gradient(to bottom, rgba(26,17,8,0.3), rgba(26,17,8,0.6), #1a1108)" }} />
-        <div
-          className="absolute inset-0"
-          style={{ background: "radial-gradient(ellipse at 70% 30%, #7c3a00 0%, #3d2a0e 35%, #1a1108 75%)" }}
-        />
-        <div className="relative z-20 text-center px-4 max-w-3xl mx-auto">
-          <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#f59e0b" }}>
-            Welcome to
-          </p>
-          <h1 className="text-7xl md:text-9xl font-bold leading-none mb-6" style={{ color: "#fef3c7" }}>
-            Reto Cafe
-          </h1>
-          <p className="text-lg md:text-xl mb-10 max-w-xl mx-auto" style={{ color: "#d4a96a" }}>
-            Authentic shawarma crafted with care. Order in, dine in, feel at home.
-          </p>
-          <Link
-            href="/menu"
-            className="inline-block font-bold px-8 py-4 rounded-full text-lg transition-all hover:scale-105"
-            style={{ backgroundColor: "#f59e0b", color: "#1a1108" }}
-            onMouseEnter={undefined}
-          >
-            Explore Menu
-          </Link>
-        </div>
-      </section>
+      <HeroSection />
+      <WhyRetoSection />
+      <SignatureSection />
 
       {/* Menu Section */}
       <section className="max-w-6xl mx-auto px-4 py-20">

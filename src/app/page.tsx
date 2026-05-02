@@ -16,8 +16,8 @@ export default async function HomePage() {
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-10" style={{ background: "linear-gradient(to bottom, rgba(26,17,8,0.3), rgba(26,17,8,0.6), #1a1108)" }} />
         <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: "url('/hero-bg.jpg')", backgroundColor: "#241608" }}
+          className="absolute inset-0"
+          style={{ background: "radial-gradient(ellipse at 70% 30%, #7c3a00 0%, #3d2a0e 35%, #1a1108 75%)" }}
         />
         <div className="relative z-20 text-center px-4 max-w-3xl mx-auto">
           <p className="text-sm font-semibold tracking-widest uppercase mb-4" style={{ color: "#f59e0b" }}>

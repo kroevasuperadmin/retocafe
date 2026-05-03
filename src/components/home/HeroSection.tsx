@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
 import { ChevronDown } from "lucide-react";
+import { FEATURED_IMAGES } from "@/lib/featured-images";
 
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
@@ -16,7 +17,7 @@ export default function HeroSection() {
       <motion.div
         style={{
           y: bgY,
-          backgroundImage: "url('https://images.unsplash.com/photo-1756362847925-71c792d6729c?w=1800&q=85')",
+          backgroundImage: `url(${FEATURED_IMAGES.hero.src})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           position: "absolute",

@@ -16,6 +16,10 @@ body {
   color: #fef3c7;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 ::-webkit-scrollbar {
   width: 6px;
 }

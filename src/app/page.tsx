@@ -21,7 +21,7 @@ export default async function HomePage() {
       <SignatureSection />
 
       {/* Menu Section */}
-      <section className="max-w-6xl mx-auto px-4 py-20">
+      <section id="menu" className="max-w-6xl mx-auto px-4 py-20 scroll-mt-24">
         <h2 className="text-3xl font-bold mb-2" style={{ color: "#fef3c7" }}>Our Menu</h2>
         <p className="mb-8" style={{ color: "#8a6a3a" }}>Fresh, made-to-order, every time.</p>
         <MenuGrid categories={categories ?? []} items={items ?? []} />

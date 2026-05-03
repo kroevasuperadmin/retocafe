@@ -71,7 +71,7 @@ export default function HeroSection() {
           transition={{ duration: 0.5, delay: 0.75 }}
         >
           <Link
-            href="/menu"
+            href="/#menu"
             className="inline-block font-bold px-10 py-4 rounded-full text-lg transition-all hover:scale-105 hover:brightness-110 active:scale-95"
             style={{ backgroundColor: "#f59e0b", color: "#1a1108" }}
           >

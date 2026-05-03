@@ -13,16 +13,29 @@ export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartOpen, setCartOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
     const supabase = createClient();
 
-    supabase.auth.getSession().then(({ data }) => {
-      setIsLoggedIn(Boolean(data.session));
-    });
-
-    const { data } = supabase.auth.onAuthStateChange((_event, session) => {
+    const syncAccess = async () => {
+      const { data } = await supabase.auth.getSession();
+      const session = data.session;
       setIsLoggedIn(Boolean(session));
+
+      if (!session) {
+        setIsAdmin(false);
+        return;
+      }
+
+      const { data: profile } = await supabase.from("profiles").select("role").eq("id", session.user.id).single();
+      setIsAdmin(profile?.role === "admin");
+    };
+
+    syncAccess();
+
+    const { data } = supabase.auth.onAuthStateChange(() => {
+      syncAccess();
     });
 
     return () => {
@@ -56,6 +69,16 @@ export default function Navbar() {
           <Link href="/account" className="p-2 hover:text-[#f59e0b] transition-colors">
             <User size={20} />
           </Link>
+          {isAdmin && (
+            <Link href="/admin" className="hidden md:inline-flex rounded-full border px-4 py-2 text-sm font-semibold transition-all hover:border-[#f59e0b] hover:text-[#f59e0b]" style={{ borderColor: "#3d2a0e" }}>
+              Admin
+            </Link>
+          )}
+          {isAdmin && (
+            <Link href="/pos" className="hidden md:inline-flex rounded-full border px-4 py-2 text-sm font-semibold transition-all hover:border-[#f59e0b] hover:text-[#f59e0b]" style={{ borderColor: "#3d2a0e" }}>
+              POS
+            </Link>
+          )}
           {isLoggedIn && (
             <LogoutButton
               className="rounded-full border px-4 py-2 text-sm font-semibold transition-all hover:border-[#f59e0b] hover:text-[#f59e0b]"
@@ -76,6 +99,12 @@ export default function Navbar() {
           <Link href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
           <Link href="/wallet" onClick={() => setMenuOpen(false)}>Wallet</Link>
           <Link href="/account" onClick={() => setMenuOpen(false)}>Account</Link>
+          {isAdmin && (
+            <>
+              <Link href="/admin" onClick={() => setMenuOpen(false)}>Admin</Link>
+              <Link href="/pos" onClick={() => setMenuOpen(false)}>POS</Link>
+            </>
+          )}
           {isLoggedIn && (
             <LogoutButton
               className="text-left"

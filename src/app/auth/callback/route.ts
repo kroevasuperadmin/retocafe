@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
+import { promoteAdminIfRequested } from "@/lib/auth/admin-signup";
 
 function getSafeNextPath(next: string | null) {
   if (!next || !next.startsWith("/")) return "/account";
@@ -34,5 +35,11 @@ export async function GET(request: NextRequest) {
   );
 
   await supabase.auth.exchangeCodeForSession(code);
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (user) {
+    await promoteAdminIfRequested(user.id);
+  }
   return response;
 }

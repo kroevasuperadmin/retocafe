@@ -9,6 +9,7 @@ export default function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [phone, setPhone] = useState("");
+  const [adminKey, setAdminKey] = useState("");
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
@@ -24,7 +25,7 @@ export default function RegisterPage() {
         email,
         password,
         options: {
-          data: { full_name: fullName, phone },
+          data: { full_name: fullName, phone, admin_signup_key: adminKey || undefined },
           emailRedirectTo: `${window.location.origin}/auth/callback?next=/account`,
         },
       });
@@ -34,11 +35,14 @@ export default function RegisterPage() {
       }
 
       if (data.session) {
+        if (adminKey) {
+          await fetch("/api/auth/promote-self", { method: "POST" });
+        }
         window.location.assign("/account");
         return;
       }
 
-      setNotice("Check your email to finish creating your account.");
+      setNotice(adminKey ? "Check your email to finish creating your account. Admin access will apply after confirmation." : "Check your email to finish creating your account.");
     } catch {
       setError("Something went wrong while creating the account.");
     } finally {
@@ -59,6 +63,16 @@ export default function RegisterPage() {
           <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Phone (optional)" className={inputClass} style={inputStyle} />
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required className={inputClass} style={inputStyle} />
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 6 chars)" required minLength={6} className={inputClass} style={inputStyle} />
+          <input
+            value={adminKey}
+            onChange={(e) => setAdminKey(e.target.value)}
+            placeholder="Admin invite code (optional)"
+            className={inputClass}
+            style={inputStyle}
+          />
+          <p className="text-xs leading-relaxed" style={{ color: "#8a6a3a" }}>
+            Only enter this if you were given an admin invite code. Otherwise leave it blank.
+          </p>
           {error && <p className="text-sm" style={{ color: "#ef4444" }}>{error}</p>}
           {notice && <p className="text-sm" style={{ color: "#d4a96a" }}>{notice}</p>}
           <button type="submit" disabled={loading} className="font-bold py-3 rounded-full transition-all disabled:opacity-50" style={{ backgroundColor: "#f59e0b", color: "#1a1108" }}>

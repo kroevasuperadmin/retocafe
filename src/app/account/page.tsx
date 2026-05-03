@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { formatDate, formatPrice, ORDER_STATUS_COLORS, ORDER_STATUS_LABELS } from "@/lib/utils";
 import Link from "next/link";
 import LogoutButton from "@/components/auth/LogoutButton";
+import DeleteAccountButton from "@/components/account/DeleteAccountButton";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -33,6 +34,41 @@ export default async function AccountPage() {
         </div>
       </div>
 
+      {profile?.role === "admin" && (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <Link
+            href="/admin"
+            className="rounded-2xl border px-5 py-4 transition-all hover:border-[#f59e0b]"
+            style={{ backgroundColor: "#1a1108", borderColor: "#3d2a0e" }}
+          >
+            <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "#f59e0b" }}>
+              Restaurant Ops
+            </p>
+            <p className="mt-2 text-lg font-semibold" style={{ color: "#fef3c7" }}>
+              Open admin dashboard
+            </p>
+            <p className="mt-1 text-sm" style={{ color: "#8a6a3a" }}>
+              Manage menu, orders, users, and wallet activity.
+            </p>
+          </Link>
+          <Link
+            href="/pos"
+            className="rounded-2xl border px-5 py-4 transition-all hover:border-[#f59e0b]"
+            style={{ backgroundColor: "#1a1108", borderColor: "#3d2a0e" }}
+          >
+            <p className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "#f59e0b" }}>
+              Cashier View
+            </p>
+            <p className="mt-2 text-lg font-semibold" style={{ color: "#fef3c7" }}>
+              Open POS
+            </p>
+            <p className="mt-1 text-sm" style={{ color: "#8a6a3a" }}>
+              Live order board for admin checkout and kitchen flow.
+            </p>
+          </Link>
+        </div>
+      )}
+
       <h2 className="text-xl font-bold mb-4" style={{ color: "#fef3c7" }}>Order History</h2>
       <div className="flex flex-col gap-4">
         {orders?.map((order) => (
@@ -53,6 +89,10 @@ export default async function AccountPage() {
         {(!orders || orders.length === 0) && (
           <p className="text-center py-8" style={{ color: "#8a6a3a" }}>No orders yet.</p>
         )}
+      </div>
+
+      <div className="mt-10">
+        <DeleteAccountButton />
       </div>
     </div>
   );

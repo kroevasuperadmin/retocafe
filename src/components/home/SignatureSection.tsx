@@ -44,6 +44,18 @@ export default function SignatureSection() {
               See Full Menu
             </Link>
           </div>
+
+          <div className="flex flex-wrap gap-3 pt-2">
+            {["Flame-grilled", "House sauces", "Late-night comfort"].map((chip) => (
+              <span
+                key={chip}
+                className="rounded-full border px-4 py-2 text-sm"
+                style={{ borderColor: "#3d2a0e", color: "#d4a96a", backgroundColor: "rgba(26,17,8,0.55)" }}
+              >
+                {chip}
+              </span>
+            ))}
+          </div>
         </motion.div>
 
         {/* Image side */}

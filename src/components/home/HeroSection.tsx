@@ -3,8 +3,15 @@
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { ChevronDown } from "lucide-react";
 import { FEATURED_IMAGES } from "@/lib/featured-images";
+
+const heroStats = [
+  { label: "Fresh off the grill", value: "Made to order" },
+  { label: "Late-night comfort", value: "Built for cravings" },
+  { label: "Wonderland energy", value: "Shawarma, rice, drinks" },
+];
 
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
@@ -13,17 +20,16 @@ export default function HeroSection() {
 
   return (
     <section ref={ref} className="relative flex items-center justify-center overflow-hidden" style={{ height: "100vh" }}>
-      {/* Parallax background */}
-      <motion.div
-        style={{
-          y: bgY,
-          backgroundImage: `url(${FEATURED_IMAGES.hero.src})`,
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          position: "absolute",
-          inset: "-20% 0",
-        }}
-      />
+      <motion.div className="absolute inset-0" style={{ y: bgY, scale: 1.06 }}>
+        <Image
+          src={FEATURED_IMAGES.hero}
+          alt="Reto Cafe hero dish"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      </motion.div>
 
       {/* Cinematic overlay — heavy at bottom, lighter at top */}
       <div
@@ -57,6 +63,16 @@ export default function HeroSection() {
         </motion.h1>
 
         <motion.p
+          initial={{ opacity: 0, y: 18 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: 0.45 }}
+          className="text-sm md:text-base font-semibold uppercase tracking-[0.45em] mb-5"
+          style={{ color: "#d4a96a" }}
+        >
+          Shawarma Wonderland
+        </motion.p>
+
+        <motion.p
           initial={{ opacity: 0, y: 24 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.55 }}
@@ -78,6 +94,34 @@ export default function HeroSection() {
           >
             Explore Menu
           </Link>
+        </motion.div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.65, delay: 0.9 }}
+          className="mt-10 grid grid-cols-1 sm:grid-cols-3 gap-3 max-w-3xl mx-auto text-left"
+        >
+          {heroStats.map((stat, index) => (
+            <div
+              key={stat.label}
+              className="rounded-2xl border px-4 py-3 backdrop-blur-xl"
+              style={{
+                backgroundColor: "rgba(26,17,8,0.45)",
+                borderColor: "rgba(61,42,14,0.8)",
+              }}
+            >
+              <p className="text-[11px] uppercase tracking-[0.28em]" style={{ color: "#8a6a3a" }}>
+                0{index + 1}
+              </p>
+              <p className="mt-1 text-sm font-semibold" style={{ color: "#fef3c7" }}>
+                {stat.value}
+              </p>
+              <p className="text-xs mt-1" style={{ color: "#d4a96a" }}>
+                {stat.label}
+              </p>
+            </div>
+          ))}
         </motion.div>
       </div>
 

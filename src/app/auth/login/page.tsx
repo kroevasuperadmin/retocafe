@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginPage() {
@@ -10,21 +9,25 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
-    const supabase = createClient();
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-    if (error) {
-      setError(error.message);
+    try {
+      const supabase = createClient();
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        setError(error.message);
+        return;
+      }
+
+      window.location.assign("/account");
+    } catch {
+      setError("Something went wrong while signing in.");
+    } finally {
       setLoading(false);
-      return;
     }
-    router.push("/account");
-    router.refresh();
   }
 
   const inputClass = "w-full rounded-xl px-4 py-3 text-sm focus:outline-none border";
@@ -34,7 +37,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4">
       <div className="w-full max-w-sm rounded-2xl border p-8" style={{ backgroundColor: "#241608", borderColor: "#3d2a0e" }}>
         <h1 className="text-2xl font-bold mb-2" style={{ color: "#fef3c7" }}>Welcome back</h1>
-        <p className="text-sm mb-8" style={{ color: "#8a6a3a" }}>Sign in to your Reto Cafe account.</p>
+        <p className="text-sm mb-8" style={{ color: "#8a6a3a" }}>Sign in to your account.</p>
         <form onSubmit={handleLogin} className="flex flex-col gap-4">
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required className={inputClass} style={inputStyle} />
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required className={inputClass} style={inputStyle} />

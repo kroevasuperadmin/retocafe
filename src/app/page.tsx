@@ -3,6 +3,7 @@ import MenuGrid from "@/components/menu/MenuGrid";
 import HeroSection from "@/components/home/HeroSection";
 import WhyRetoSection from "@/components/home/WhyRetoSection";
 import SignatureSection from "@/components/home/SignatureSection";
+import AccessModesSection from "@/components/home/AccessModesSection";
 
 export default async function HomePage() {
   const supabase = await createClient();
@@ -16,6 +17,7 @@ export default async function HomePage() {
     <div>
       <HeroSection />
       <WhyRetoSection />
+      <AccessModesSection />
       <SignatureSection />
 
       {/* Menu Section */}

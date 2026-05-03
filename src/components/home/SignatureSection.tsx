@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
+import { FEATURED_IMAGES } from "@/lib/featured-images";
 
 export default function SignatureSection() {
   return (
@@ -55,7 +56,7 @@ export default function SignatureSection() {
           style={{ border: "1px solid #3d2a0e" }}
         >
           <Image
-            src="https://images.unsplash.com/photo-1529006557810-274b9b2fc783?w=900&q=85"
+            src={FEATURED_IMAGES.signature}
             alt="Reto Cafe Signature Shawarma"
             fill
             className="object-cover"

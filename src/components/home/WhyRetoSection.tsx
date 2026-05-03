@@ -6,7 +6,7 @@ const features = [
   {
     num: "01",
     title: "Made Fresh Daily",
-    body: "Every shawarma, every bowl of nasi arab — prepared the same day, never yesterday's leftovers.",
+    body: "Every shawarma and every bowl of nasi arab is prepared the same day, never yesterday's leftovers.",
   },
   {
     num: "02",
@@ -34,16 +34,10 @@ export default function WhyRetoSection() {
             className="flex flex-col gap-4 p-8 rounded-2xl border"
             style={{ backgroundColor: "#1a1108", borderColor: "#3d2a0e" }}
           >
-            <span
-              className="font-bold tracking-widest text-sm"
-              style={{ color: "#f59e0b" }}
-            >
+            <span className="font-bold tracking-widest text-sm" style={{ color: "#f59e0b" }}>
               {f.num}
             </span>
-            <h3
-              className="text-2xl font-bold leading-tight"
-              style={{ color: "#fef3c7" }}
-            >
+            <h3 className="text-2xl font-bold leading-tight" style={{ color: "#fef3c7" }}>
               {f.title}
             </h3>
             <p className="leading-relaxed" style={{ color: "#8a6a3a" }}>

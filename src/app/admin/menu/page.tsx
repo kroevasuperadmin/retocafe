@@ -1,29 +1,43 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { MenuCategory, MenuItem } from "@/lib/types";
 import { formatPrice } from "@/lib/utils";
 import MenuItemForm from "@/components/admin/MenuItemForm";
-import { Plus, Pencil, Trash2 } from "lucide-react";
+import CategoryForm from "@/components/admin/CategoryForm";
+import { Plus, Pencil, Trash2, Tag } from "lucide-react";
 
 export default function AdminMenuPage() {
   const [categories, setCategories] = useState<MenuCategory[]>([]);
   const [items, setItems] = useState<MenuItem[]>([]);
   const [showForm, setShowForm] = useState(false);
   const [editItem, setEditItem] = useState<MenuItem | undefined>();
+  const [showCatForm, setShowCatForm] = useState(false);
+  const [editCat, setEditCat] = useState<MenuCategory | undefined>();
   const supabase = createClient();
 
-  async function load() {
+  const load = useCallback(async () => {
     const [{ data: cats }, { data: menuItems }] = await Promise.all([
       supabase.from("menu_categories").select("*").order("display_order"),
       supabase.from("menu_items").select("*").order("display_order"),
     ]);
     setCategories(cats ?? []);
     setItems(menuItems ?? []);
-  }
+  }, [supabase]);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => {
+    const id = window.setTimeout(() => {
+      void load();
+    }, 0);
+    return () => window.clearTimeout(id);
+  }, [load]);
+
+  async function deleteCategory(id: string) {
+    if (!confirm("Delete this category? All items in it will be unlinked.")) return;
+    await supabase.from("menu_categories").delete().eq("id", id);
+    load();
+  }
 
   async function deleteItem(id: string) {
     if (!confirm("Delete this item?")) return;
@@ -40,14 +54,33 @@ export default function AdminMenuPage() {
     <div className="max-w-4xl mx-auto px-4 py-12">
       <div className="flex justify-between items-center mb-8">
         <h1 className="text-3xl font-bold" style={{ color: "#fef3c7" }}>Menu Management</h1>
-        <button
-          onClick={() => { setEditItem(undefined); setShowForm(true); }}
-          className="flex items-center gap-2 font-bold px-5 py-2 rounded-full transition-all"
-          style={{ backgroundColor: "#f59e0b", color: "#1a1108" }}
-        >
-          <Plus size={16} /> Add Item
-        </button>
+        <div className="flex gap-3">
+          <button
+            onClick={() => { setEditCat(undefined); setShowCatForm(true); setShowForm(false); }}
+            className="flex items-center gap-2 font-bold px-5 py-2 rounded-full border transition-all"
+            style={{ borderColor: "#f59e0b", color: "#f59e0b" }}
+          >
+            <Tag size={15} /> Add Category
+          </button>
+          <button
+            onClick={() => { setEditItem(undefined); setShowForm(true); setShowCatForm(false); }}
+            className="flex items-center gap-2 font-bold px-5 py-2 rounded-full transition-all"
+            style={{ backgroundColor: "#f59e0b", color: "#1a1108" }}
+          >
+            <Plus size={16} /> Add Item
+          </button>
+        </div>
       </div>
+
+      {showCatForm && (
+        <div className="rounded-2xl border p-6 mb-8" style={{ backgroundColor: "#241608", borderColor: "#3d2a0e" }}>
+          <h2 className="font-semibold mb-4" style={{ color: "#d4a96a" }}>{editCat ? "Edit Category" : "New Category"}</h2>
+          <CategoryForm
+            category={editCat}
+            onClose={() => { setShowCatForm(false); load(); }}
+          />
+        </div>
+      )}
 
       {showForm && (
         <div className="rounded-2xl border p-6 mb-8" style={{ backgroundColor: "#241608", borderColor: "#3d2a0e" }}>
@@ -59,6 +92,24 @@ export default function AdminMenuPage() {
           />
         </div>
       )}
+
+      {/* Categories */}
+      <div className="mb-8">
+        <p className="text-xs font-bold uppercase tracking-widest mb-3" style={{ color: "#8a6a3a" }}>Categories ({categories.length})</p>
+        <div className="flex flex-wrap gap-2">
+          {categories.map((cat) => (
+            <div key={cat.id} className="flex items-center gap-1 text-sm px-3 py-1.5 rounded-full border" style={{ backgroundColor: "#241608", borderColor: "#3d2a0e", color: "#d4a96a" }}>
+              <span>{cat.name}</span>
+              <button onClick={() => { setEditCat(cat); setShowCatForm(true); setShowForm(false); }} className="ml-1 hover:text-[#f59e0b] transition-colors">
+                <Pencil size={11} />
+              </button>
+              <button onClick={() => deleteCategory(cat.id)} className="hover:text-[#ef4444] transition-colors">
+                <Trash2 size={11} />
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
 
       <div className="flex flex-col gap-3">
         {items.map((item) => (

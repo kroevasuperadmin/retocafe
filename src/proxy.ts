@@ -47,10 +47,10 @@ export async function proxy(request: NextRequest) {
     if (path.startsWith("/admin") && role !== "admin") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    if (path.startsWith("/pos") && !["cashier", "admin"].includes(role)) {
+    if (path.startsWith("/pos") && role !== "admin") {
       return NextResponse.redirect(new URL("/", request.url));
     }
-    if (path.startsWith("/staff") && !["staff", "admin"].includes(role)) {
+    if (path.startsWith("/staff") && role !== "admin") {
       return NextResponse.redirect(new URL("/", request.url));
     }
   }

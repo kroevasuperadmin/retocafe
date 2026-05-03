@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
 import { formatDate, formatPrice, ORDER_STATUS_COLORS, ORDER_STATUS_LABELS } from "@/lib/utils";
 import Link from "next/link";
+import LogoutButton from "@/components/auth/LogoutButton";
 
 export default async function AccountPage() {
   const supabase = await createClient();
@@ -24,9 +25,12 @@ export default async function AccountPage() {
           <p className="text-sm" style={{ color: "#8a6a3a" }}>{user.email}</p>
           {profile?.phone && <p className="text-sm" style={{ color: "#8a6a3a" }}>{profile.phone}</p>}
         </div>
-        <Link href="/wallet" className="border px-4 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-80" style={{ backgroundColor: "rgba(245,158,11,0.1)", borderColor: "rgba(245,158,11,0.3)", color: "#f59e0b" }}>
-          Wallet: {formatPrice(wallet?.balance ?? 0)}
-        </Link>
+        <div className="flex flex-col gap-3 items-end">
+          <Link href="/wallet" className="border px-4 py-2 rounded-xl text-sm font-medium transition-all hover:opacity-80" style={{ backgroundColor: "rgba(245,158,11,0.1)", borderColor: "rgba(245,158,11,0.3)", color: "#f59e0b" }}>
+            Wallet: {formatPrice(wallet?.balance ?? 0)}
+          </Link>
+          <LogoutButton className="text-sm font-medium rounded-xl border px-4 py-2 transition-all hover:border-[#f59e0b] hover:text-[#f59e0b]" />
+        </div>
       </div>
 
       <h2 className="text-xl font-bold mb-4" style={{ color: "#fef3c7" }}>Order History</h2>

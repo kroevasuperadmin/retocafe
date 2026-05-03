@@ -8,7 +8,7 @@ import MenuItemCard from "@/components/menu/MenuItemCard";
 import CategoryTabs from "@/components/menu/CategoryTabs";
 import { formatPrice } from "@/lib/utils";
 
-export default function StaffPage() {
+export default function AdminOrderEntryPage() {
   const [categories, setCategories] = useState<MenuCategory[]>([]);
   const [items, setItems] = useState<MenuItem[]>([]);
   const [activeCategory, setActiveCategory] = useState("all");
@@ -16,7 +16,7 @@ export default function StaffPage() {
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState("");
   const { items: cartItems, total, clearCart } = useCart();
-  const supabase = createClient();
+  const [supabase] = useState(() => createClient());
 
   useEffect(() => {
     async function load() {
@@ -28,7 +28,7 @@ export default function StaffPage() {
       setItems(menuItems ?? []);
     }
     load();
-  }, []);
+  }, [supabase]);
 
   const filtered =
     activeCategory === "all"
@@ -56,7 +56,10 @@ export default function StaffPage() {
       .select()
       .single();
 
-    if (!order) { setLoading(false); return; }
+    if (!order) {
+      setLoading(false);
+      return;
+    }
 
     await supabase.from("order_items").insert(
       cartItems.map((i) => ({
@@ -71,13 +74,16 @@ export default function StaffPage() {
     clearCart();
     setTableNumber("");
     setLoading(false);
-    setSent(`Order #${order.id.slice(0, 8).toUpperCase()} sent to cashier!`);
+    setSent(`Order #${order.id.slice(0, 8).toUpperCase()} sent to POS!`);
   }
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8 flex gap-6">
       <div className="flex-1">
-        <h1 className="text-2xl font-bold mb-6" style={{ color: "#fef3c7" }}>Staff — Place Order</h1>
+        <h1 className="text-2xl font-bold mb-2" style={{ color: "#fef3c7" }}>Admin Order Entry</h1>
+        <p className="text-sm mb-6" style={{ color: "#8a6a3a" }}>
+          Use this on a phone when an admin needs to place an order. Every submission syncs straight to the cashier POS.
+        </p>
         <CategoryTabs categories={categories} active={activeCategory} onChange={setActiveCategory} />
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mt-6">
           {filtered.map((item) => <MenuItemCard key={item.id} item={item} />)}
@@ -88,7 +94,8 @@ export default function StaffPage() {
         <div className="rounded-2xl p-6 border sticky top-20" style={{ backgroundColor: "#241608", borderColor: "#3d2a0e" }}>
           <h2 className="font-semibold mb-4" style={{ color: "#d4a96a" }}>Current Order</h2>
           <input
-            value={tableNumber} onChange={(e) => setTableNumber(e.target.value)}
+            value={tableNumber}
+            onChange={(e) => setTableNumber(e.target.value)}
             placeholder="Table number"
             className="w-full rounded-xl px-4 py-2 text-sm border mb-4 focus:outline-none"
             style={{ backgroundColor: "#1a1108", borderColor: "#3d2a0e", color: "#fef3c7" }}
@@ -96,7 +103,7 @@ export default function StaffPage() {
           <div className="flex flex-col gap-2 mb-4 max-h-64 overflow-y-auto">
             {cartItems.map(({ menu_item, quantity }) => (
               <div key={menu_item.id} className="flex justify-between text-sm">
-                <span style={{ color: "#fef3c7" }}>{menu_item.name} ×{quantity}</span>
+                <span style={{ color: "#fef3c7" }}>{menu_item.name} x{quantity}</span>
                 <span style={{ color: "#d4a96a" }}>{formatPrice(menu_item.price * quantity)}</span>
               </div>
             ))}
@@ -108,11 +115,12 @@ export default function StaffPage() {
           </div>
           {sent && <p className="text-xs text-center mb-3" style={{ color: "#4ade80" }}>{sent}</p>}
           <button
-            onClick={submitOrder} disabled={loading || cartItems.length === 0}
+            onClick={submitOrder}
+            disabled={loading || cartItems.length === 0}
             className="w-full font-bold py-3 rounded-xl transition-all disabled:opacity-50"
             style={{ backgroundColor: "#f59e0b", color: "#1a1108" }}
           >
-            {loading ? "Sending..." : "Send to Cashier"}
+            {loading ? "Sending..." : "Send to POS"}
           </button>
         </div>
       </div>

@@ -9,7 +9,7 @@ type FullOrder = Order & { order_items: OrderItem[] };
 
 export default function POSBoard() {
   const [orders, setOrders] = useState<FullOrder[]>([]);
-  const supabase = createClient();
+  const [supabase] = useState(() => createClient());
 
   const fetchOrders = useCallback(async () => {
     const { data } = await supabase
@@ -18,10 +18,12 @@ export default function POSBoard() {
       .in("status", ["pending", "preparing", "ready"])
       .order("created_at", { ascending: true });
     setOrders((data as FullOrder[]) ?? []);
-  }, []);
+  }, [supabase]);
 
   useEffect(() => {
-    fetchOrders();
+    const id = window.setTimeout(() => {
+      void fetchOrders();
+    }, 0);
 
     const channel = supabase
       .channel("pos-orders")
@@ -30,8 +32,11 @@ export default function POSBoard() {
       })
       .subscribe();
 
-    return () => { supabase.removeChannel(channel); };
-  }, [fetchOrders]);
+    return () => {
+      window.clearTimeout(id);
+      supabase.removeChannel(channel);
+    };
+  }, [fetchOrders, supabase]);
 
   const cols = [
     { label: "Pending", key: "pending", color: "#eab308" },

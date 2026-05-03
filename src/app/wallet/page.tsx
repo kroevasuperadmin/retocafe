@@ -14,7 +14,7 @@ export default function WalletPage() {
   const [loading, setLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const router = useRouter();
-  const supabase = createClient();
+  const [supabase] = useState(() => createClient());
 
   useEffect(() => {
     async function load() {
@@ -29,7 +29,7 @@ export default function WalletPage() {
       setTransactions(txns ?? []);
     }
     load();
-  }, []);
+  }, [router, supabase]);
 
   async function handleTopup(e: React.FormEvent) {
     e.preventDefault();

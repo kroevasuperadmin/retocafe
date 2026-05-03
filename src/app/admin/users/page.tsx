@@ -10,9 +10,7 @@ export default async function AdminUsersPage() {
 
   const roleBadge: Record<string, { bg: string; text: string }> = {
     admin: { bg: "rgba(245,158,11,0.2)", text: "#f59e0b" },
-    staff: { bg: "rgba(59,130,246,0.2)", text: "#60a5fa" },
-    cashier: { bg: "rgba(34,197,94,0.2)", text: "#4ade80" },
-    customer: { bg: "#3d2a0e", text: "#8a6a3a" },
+    member: { bg: "#3d2a0e", text: "#8a6a3a" },
   };
 
   return (
@@ -20,7 +18,8 @@ export default async function AdminUsersPage() {
       <h1 className="text-3xl font-bold mb-8" style={{ color: "#fef3c7" }}>Users</h1>
       <div className="flex flex-col gap-3">
         {users?.map((user) => {
-          const badge = roleBadge[user.role] ?? roleBadge.customer;
+          const displayRole = user.role === "customer" ? "Member" : "Admin";
+          const badge = user.role === "customer" ? roleBadge.member : roleBadge.admin;
           return (
             <div key={user.id} className="rounded-xl p-4 border flex items-center gap-4" style={{ backgroundColor: "#241608", borderColor: "#3d2a0e" }}>
               <div className="flex-1">
@@ -28,7 +27,7 @@ export default async function AdminUsersPage() {
                 <p className="text-sm" style={{ color: "#8a6a3a" }}>{formatDate(user.created_at)}</p>
               </div>
               <span className="text-xs px-2 py-1 rounded-full capitalize" style={{ backgroundColor: badge.bg, color: badge.text }}>
-                {user.role}
+                {displayRole}
               </span>
             </div>
           );

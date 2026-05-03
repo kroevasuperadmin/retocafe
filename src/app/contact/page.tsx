@@ -24,7 +24,7 @@ export default function ContactPage() {
           <span className="text-xl mt-0.5">🌐</span>
           <div>
             <p className="font-semibold" style={{ color: "#fef3c7" }}>Website</p>
-            <a href="https://retocafe.com" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: "#f59e0b" }}>retocafe.com</a>
+            <a href="https://retocafe.vercel.app" target="_blank" rel="noopener noreferrer" className="hover:underline" style={{ color: "#f59e0b" }}>retocafe.vercel.app</a>
           </div>
         </div>
         <div className="flex items-start gap-3">

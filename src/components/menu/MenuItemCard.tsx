@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { Plus } from "lucide-react";
 import { MenuItem } from "@/lib/types";
@@ -15,11 +14,7 @@ export default function MenuItemCard({ item }: Props) {
   const { addItem } = useCart();
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: "-60px" }}
-      transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
+    <div
       className="rounded-2xl overflow-hidden border transition-all group cursor-default"
       style={{ backgroundColor: "#241608", borderColor: "#3d2a0e" }}
       onMouseEnter={(e) => (e.currentTarget.style.borderColor = "rgba(245,158,11,0.5)")}
@@ -34,7 +29,17 @@ export default function MenuItemCard({ item }: Props) {
             className="object-cover transition-transform duration-500 group-hover:scale-105"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-5xl">🌯</div>
+          <div
+            className="w-full h-full flex flex-col items-center justify-center gap-1 text-center px-4"
+            style={{ background: "linear-gradient(180deg, #3d2a0e 0%, #241608 100%)" }}
+          >
+            <span className="text-xs font-bold uppercase tracking-[0.3em]" style={{ color: "#f59e0b" }}>
+              Reto Cafe
+            </span>
+            <span className="text-sm" style={{ color: "#fef3c7" }}>
+              Photo pending
+            </span>
+          </div>
         )}
         {!item.is_available && (
           <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: "rgba(26,17,8,0.75)" }}>
@@ -62,6 +67,6 @@ export default function MenuItemCard({ item }: Props) {
           </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

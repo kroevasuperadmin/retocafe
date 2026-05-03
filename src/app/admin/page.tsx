@@ -23,8 +23,8 @@ export default async function AdminPage() {
     { href: "/admin/orders", label: "All Orders" },
     { href: "/admin/users", label: "Users" },
     { href: "/admin/wallet", label: "Wallet Transactions" },
-    { href: "/pos", label: "POS Dashboard" },
-    { href: "/staff", label: "Staff Order Entry" },
+    { href: "/staff", label: "Admin Order Entry" },
+    { href: "/pos", label: "Cashier POS Dashboard" },
   ];
 
   return (

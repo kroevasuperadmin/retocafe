@@ -72,13 +72,14 @@ export default function CartSidebar({ open, onClose }: Props) {
                 <div className="flex h-full flex-col items-center justify-center gap-3 text-center">
                   <ShoppingCart size={42} style={{ color: "#f59e0b" }} />
                   <p className="text-sm" style={{ color: "#8a6a3a" }}>Your cart is empty</p>
-                  <button
+                  <Link
+                    href="/menu"
                     onClick={onClose}
                     className="text-sm font-semibold mt-1 underline underline-offset-2"
                     style={{ color: "#f59e0b" }}
                   >
                     Browse Menu
-                  </button>
+                  </Link>
                 </div>
               ) : (
                 <div className="divide-y" style={{ borderColor: "#3d2a0e" }}>

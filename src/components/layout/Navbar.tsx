@@ -66,6 +66,9 @@ export default function Navbar() {
               </span>
             )}
           </button>
+          <Link href="/cart" className="rounded-full border px-4 py-2 text-sm font-semibold transition-all hover:border-[#f59e0b] hover:text-[#f59e0b]" style={{ borderColor: "#3d2a0e" }}>
+            Cart{count > 0 ? ` (${count})` : ""}
+          </Link>
           <Link href="/account" className="p-2 hover:text-[#f59e0b] transition-colors">
             <User size={20} />
           </Link>
@@ -98,6 +101,7 @@ export default function Navbar() {
           <Link href="/about" onClick={() => setMenuOpen(false)}>About</Link>
           <Link href="/contact" onClick={() => setMenuOpen(false)}>Contact</Link>
           <Link href="/wallet" onClick={() => setMenuOpen(false)}>Wallet</Link>
+          <Link href="/cart" onClick={() => setMenuOpen(false)}>Cart{count > 0 ? ` (${count})` : ""}</Link>
           <Link href="/account" onClick={() => setMenuOpen(false)}>Account</Link>
           {isAdmin && (
             <>

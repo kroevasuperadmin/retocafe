@@ -13,6 +13,8 @@ const heroStats = [
   { label: "Wonderland energy", value: "Shawarma, rice, drinks" },
 ];
 
+const floatingTags = ["Fire", "Smoke", "Sauce", "Steam"];
+
 export default function HeroSection() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
@@ -30,6 +32,21 @@ export default function HeroSection() {
           className="object-cover"
         />
       </motion.div>
+
+      <motion.div
+        aria-hidden="true"
+        className="absolute -top-24 -left-24 h-72 w-72 rounded-full blur-3xl"
+        style={{ backgroundColor: "rgba(245,158,11,0.16)" }}
+        animate={{ x: [0, 30, 0], y: [0, 20, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
+      />
+      <motion.div
+        aria-hidden="true"
+        className="absolute bottom-[-8rem] right-[-4rem] h-96 w-96 rounded-full blur-3xl"
+        style={{ backgroundColor: "rgba(212,169,106,0.12)" }}
+        animate={{ x: [0, -24, 0], y: [0, -18, 0] }}
+        transition={{ duration: 16, repeat: Infinity, ease: "easeInOut" }}
+      />
 
       {/* Cinematic overlay — heavy at bottom, lighter at top */}
       <div
@@ -51,6 +68,19 @@ export default function HeroSection() {
         >
           Welcome to
         </motion.p>
+
+        <motion.div
+          initial={{ opacity: 0, y: 16, scale: 0.98 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.28 }}
+          className="inline-flex items-center gap-2 rounded-full border px-4 py-2 mb-6 backdrop-blur-xl"
+          style={{ backgroundColor: "rgba(26,17,8,0.35)", borderColor: "rgba(61,42,14,0.9)" }}
+        >
+          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: "#f59e0b" }} />
+          <span className="text-xs font-semibold uppercase tracking-[0.28em]" style={{ color: "#d4a96a" }}>
+            Open late, served hot
+          </span>
+        </motion.div>
 
         <motion.h1
           initial={{ opacity: 0, y: 40 }}
@@ -94,6 +124,34 @@ export default function HeroSection() {
           >
             Explore Menu
           </Link>
+        </motion.div>
+
+        <motion.div
+          initial="hidden"
+          animate="show"
+          variants={{
+            hidden: {},
+            show: { transition: { staggerChildren: 0.08, delayChildren: 0.95 } },
+          }}
+          className="mt-8 flex flex-wrap justify-center gap-3"
+        >
+          {floatingTags.map((tag) => (
+            <motion.span
+              key={tag}
+              variants={{
+                hidden: { opacity: 0, y: 12, scale: 0.96 },
+                show: { opacity: 1, y: 0, scale: 1 },
+              }}
+              className="rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em]"
+              style={{
+                backgroundColor: "rgba(26,17,8,0.4)",
+                borderColor: "rgba(61,42,14,0.8)",
+                color: "#fef3c7",
+              }}
+            >
+              {tag}
+            </motion.span>
+          ))}
         </motion.div>
 
         <motion.div
